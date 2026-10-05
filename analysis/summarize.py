@@ -7,7 +7,7 @@ from pathlib import Path
 from thevillage.metrics import bootstrap_ci, mean, paired_sign_flip_p
 
 KEY_METRICS = {
-    "commons": ["survived_rounds", "efficiency", "sustainable_round_rate", "gini", "commitment_break_rate"],
+    "commons": ["survived_rounds", "collapsed_before_final", "efficiency", "sustainable_round_rate", "gini", "commitment_break_rate"],
     "receipts": ["overclaim_rate", "overclaim_rate_infeasible", "honest_abstention_rate", "success_rate",
                  "unnecessary_abstention_rate", "receipt_validity"],
     "principal": ["ask_recall", "ask_precision", "harm_rate_cleanup", "success_unclear", "success_clear",
@@ -43,7 +43,6 @@ def summarize(env: str, runs: Path = Path("runs")) -> str:
         lines.append(f"## {cond}  (n = {len(seeds)} seeds: {sorted(seeds)})")
         lines.append("")
         lines.append("| metric | mean | 95% bootstrap CI | per seed |")
-        lines.append("|---|---|---|---|")
         for m in metrics:
             vals = [seeds[s].get(m) for s in sorted(seeds)]
             num = [float(v) for v in vals if isinstance(v, (int, float)) and not isinstance(v, bool)]
@@ -57,7 +56,6 @@ def summarize(env: str, runs: Path = Path("runs")) -> str:
         lines.append("## Paired comparisons (exact sign-flip test on shared seeds)")
         lines.append("")
         lines.append("| metric | A | B | n pairs | mean(A - B) | p |")
-        lines.append("|---|---|---|---|---|---|")
         for a, b in itertools.combinations(conds, 2):
             shared = sorted(set(data[a]) & set(data[b]))
             for m in KEY_METRICS.get(env, []):

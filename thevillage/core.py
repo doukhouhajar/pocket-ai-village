@@ -64,6 +64,8 @@ def build_village(
         if prompt_fh:
             prompt_fh.write(json.dumps(rec) + "\n")
 
+    if n_agents > len(AGENT_NAMES):
+        raise ValueError(f"{n_agents} agents requested but AGENT_NAMES has only {len(AGENT_NAMES)}")
     names = AGENT_NAMES[:n_agents]
     agents = [
         Agent(

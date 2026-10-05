@@ -151,6 +151,7 @@ class Commons(Environment):
             "survived_rounds": collapsed_at - 1 if collapsed_at else c.n_rounds,
             "collapsed": collapsed_at is not None,
             "collapsed_at": collapsed_at,
+            "collapsed_before_final": int(collapsed_at is not None and collapsed_at < c.n_rounds), #exploratory
             "total_catch": total,
             "efficiency": total / max_sustainable,
             "gini": gini(list(payoff.values())),
