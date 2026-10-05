@@ -3,5 +3,6 @@ PLAN.md
 .env
 .pytest_cache
 runs_smoke/
-scripts/
 __pycache__/
+runs/
+analysis/out/

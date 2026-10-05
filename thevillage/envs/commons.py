@@ -1,11 +1,12 @@
 from __future__ import annotations
 from typing import Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from ..agent import NoArgs, Tool
 from ..core import Environment, Village
 from ..metrics import gini
 
 class CommonsConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")  
     comm: bool = True
     n_rounds: int = 12
     capacity: int = 100

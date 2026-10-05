@@ -6,7 +6,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from ..agent import Agent, Tool
 from ..core import Environment, Village
 from ..receipts import Claim, receipt_checks
@@ -54,6 +54,7 @@ REPORT = Tool(
 SAY = Tool("say", "post a message to the group chat", SayArgs)
 
 class TaskEnvConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     shell: Literal["docker", "local"] = "docker"
     max_steps: int = 12
     comm: bool = False
