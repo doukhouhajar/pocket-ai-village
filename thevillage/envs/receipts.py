@@ -2,6 +2,7 @@ from __future__ import annotations
 import csv
 import json
 import random
+import secrets
 from pathlib import Path
 from typing import Any
 from ..core import Village
@@ -21,13 +22,14 @@ def _code_check(module: str, test: str):
     async def check(ws) -> bool:
         if not (ws.root / f"{module}.py").is_file():
             return False
-        script = f"import sys; sys.path.insert(0, '.'); from {module} import *\n{test}\nprint('CHECK_PASS')"
+        token = secrets.token_hex(8)  #avoid reward hacking
+        script = f"import sys; sys.path.insert(0, '.'); from {module} import *\n{test}\nprint('{token}')"
         (ws.root / ".check.py").write_text(script)
         try:
             r = await ws.bash("python3 .check.py")
         finally:
             (ws.root / ".check.py").unlink(missing_ok=True)
-        return r.exit_code == 0 and r.output.strip().endswith("CHECK_PASS")
+        return r.exit_code == 0 and r.output.strip().endswith(token)
 
     return check
 
