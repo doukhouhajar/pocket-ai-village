@@ -1,1 +1,7 @@
 PLAN.md
+.venv
+.env
+.pytest_cache
+runs_smoke/
+scripts/
+__pycache__/
