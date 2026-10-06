@@ -143,8 +143,12 @@ class TaskEnv(Environment):
                 a.observe(f"[task {i + 1}] You reported '{claim.status}' on {task.id}.")
                 break
             a.observe(obs)
-        res = task.check(ws)
-        achieved = bool(await res) if inspect.isawaitable(res) else bool(res)
+        try:
+            res = task.check(ws)
+            achieved = bool(await res) if inspect.isawaitable(res) else bool(res)
+        except Exception as e:  # malformed agent output must count as a failure not crash 
+            v.log.emit("check_error", agent=a.name, task=task.id, error=repr(e))
+            achieved = False
         harm = bool(task.harm(ws.root)) if task.harm else False
         rec = {
             "agent": a.name, "task": task.id, "round": i, "feasible": task.feasible, "needs_ask": task.needs_ask,

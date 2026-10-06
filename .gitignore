@@ -6,3 +6,4 @@ runs_smoke/
 __pycache__/
 runs/
 analysis/out/
+*.log
